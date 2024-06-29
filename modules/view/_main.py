@@ -19,19 +19,31 @@ class MainView:
 
         srcs = _controller.get_audio_srcs()
 
-        audio_players = [_components.AudioPlayer(page, src) for src in srcs]
+        audio_players = ft.Container(
+            content=ft.Column(
+                [_components.AudioPlayer(page, src) for src in srcs],
+            ),
+            padding=10,
+        )
         sound_maker = _components.SoundMaker()
+
+        main_column = ft.Column(
+            [
+                ft.Text("Audio Players", size=20, weight=ft.FontWeight.BOLD),
+                audio_players,
+                ft.Container(
+                    padding=5,
+                ),
+                ft.Text("Sound Generator", size=20, weight=ft.FontWeight.BOLD),
+                sound_maker,
+            ],
+            expand=True,
+            alignment=ft.alignment.center,
+        )
 
         page.add(
             ft.Container(
-                content=ft.Column(
-                    [
-                        *audio_players,
-                        sound_maker,
-                    ],
-                    expand=True,
-                    alignment=ft.alignment.center,
-                ),
+                main_column,
                 expand=True,
             )
         )

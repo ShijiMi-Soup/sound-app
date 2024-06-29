@@ -4,9 +4,9 @@ import sounddevice as sd
 
 
 class SoundMakerField:
-    def __init__(self, value: float):
+    def __init__(self, value: float, label: str = ""):
         self.value = value
-        self.control = ft.TextField(f"{value}", on_change=self.on_change)
+        self.control = ft.TextField(f"{value}", label=label, on_change=self.on_change)
 
     def on_change(self, e):
         new_value = e.control.value
@@ -23,9 +23,9 @@ class SoundMakerFields:
 
     # TODO: 周波数、長さ、音量
     def __init__(self):
-        self.freq = SoundMakerField(440)
-        self.duration = SoundMakerField(1)
-        self.amp = SoundMakerField(0.5)
+        self.freq = SoundMakerField(440, "Frequency")
+        self.duration = SoundMakerField(1, "Duration")
+        self.amp = SoundMakerField(0.5, "Amplitude")
 
     @property
     def values(self):
@@ -53,17 +53,31 @@ class SoundMakerFields:
         sd.wait()
 
 
-class SoundMaker(ft.Column):
+class SoundMaker(ft.Container):
     def __init__(self):
         # テキストフィールドを追加
         self.fields = SoundMakerFields()
         self.button = ft.ElevatedButton("Play", on_click=self.on_click)
 
+        self.field_container = ft.Column(
+            [*self.fields.controls],
+            alignment=ft.alignment.center,
+        )
+        self.btn_container = ft.Container(
+            content=self.button,
+            alignment=ft.alignment.center,
+        )
+
+        row = ft.Column(
+            [self.field_container, self.btn_container],
+            alignment=ft.alignment.center,
+        )
+
         # 親クラスのコンストラクタを呼び出す
         super().__init__(
-            controls=[*self.fields.controls, self.button],
-            alignment=ft.alignment.center,
+            content=row,
             expand=True,
+            padding=10,
         )
 
     def on_click(self, e):
