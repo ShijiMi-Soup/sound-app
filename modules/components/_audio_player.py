@@ -15,7 +15,7 @@ class AudioPlayer(ft.Row):
         self.button = ft.IconButton(self._icon_play, on_click=self.on_click)
 
         # Audioを追加
-        self.audio = ft.Audio(src=src)
+        self.audio = ft.Audio(src=src.url)
         page.overlay.append(self.audio)
 
         # 親クラスのコンストラクタを呼び出す
